@@ -145,9 +145,9 @@
         private System.Windows.Forms.Button btnOpenFile;
         private System.Windows.Forms.Label lblChosenFile;
         private Emgu.CV.UI.ImageBox ibOriginal;
-        private System.Windows.Forms.CheckBox cbShowSteps;
-        private System.Windows.Forms.TextBox txtInfo;
         private System.Windows.Forms.OpenFileDialog ofdOpenFile;
+        public System.Windows.Forms.CheckBox cbShowSteps;
+        public System.Windows.Forms.TextBox txtInfo;
     }
 }
 

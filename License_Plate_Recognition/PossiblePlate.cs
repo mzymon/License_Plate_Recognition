@@ -15,7 +15,7 @@ using Emgu.CV.UI;
 
 namespace License_Plate_Recognition
 {
-    class PossiblePlate
+    public class PossiblePlate
     {
         public Mat imgPlate;
         public Mat imgGrayscale;

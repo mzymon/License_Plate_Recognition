@@ -18,7 +18,7 @@ using System.Drawing;
 
 namespace License_Plate_Recognition
 {
-    class PossibleChar
+    public class PossibleChar
     {
         public VectorOfPoint contour;
         public Rectangle boundingRect;

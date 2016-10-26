@@ -33,6 +33,9 @@ namespace License_Plate_Recognition
         MCvScalar SCALAR_RED = new MCvScalar(0.0, 0.0, 255.0);
 
         MCvScalar SCALAR_YELLOW = new MCvScalar(0.0, 255.0, 255.0);
+        public bool cbShowStepsChecked;
+        public DetectChars detectChars;
+        public DetectPlates detectPlates;
         public frmMain()
         {
             InitializeComponent();
@@ -42,8 +45,9 @@ namespace License_Plate_Recognition
         {
             cbShowSteps_CheckedChanged(new object(), new EventArgs());
             //call check box event to update form based on check box initial state
-
-            bool blnKNNTrainingSuccessful = loadKNNDataAndTrainKNN();
+            detectPlates = new DetectPlates();
+            detectChars = new DetectChars();
+            bool blnKNNTrainingSuccessful = detectChars.loadKNNDataAndTrainKNN();
             //attempt KNN training
 
             //if KNN training was not successful
@@ -66,7 +70,7 @@ namespace License_Plate_Recognition
             Mat imgOriginalScene = new Mat();
             //this is the original image scene
 
-            object blnImageOpenedSuccessfully = openImageWithErrorHandling(ref imgOriginalScene);
+            bool blnImageOpenedSuccessfully = openImageWithErrorHandling(ref imgOriginalScene);
             //attempt to open image
 
             //if image was not opened successfully
@@ -87,10 +91,10 @@ namespace License_Plate_Recognition
             ibOriginal.Image = imgOriginalScene;
             //show original image on main form
 
-            List<PossiblePlate> listOfPossiblePlates = DetectPlates.detectPlatesInScene(imgOriginalScene);
+            List<PossiblePlate> listOfPossiblePlates = detectPlates.detectPlatesInScene(imgOriginalScene);
             //detect plates
 
-            listOfPossiblePlates = DetectChars.detectCharsInPlates(listOfPossiblePlates);
+            listOfPossiblePlates = detectChars.detectCharsInPlates(listOfPossiblePlates);
             //detect chars in plates
 
             //check if list of plates is null or zero
@@ -110,7 +114,7 @@ namespace License_Plate_Recognition
                 listOfPossiblePlates.Sort((onePlate, otherPlate) => otherPlate.strChars.Length.CompareTo(onePlate.strChars.Length));
 
                 //suppose the plate with the most recognized chars
-                PossiblePlate licPlate = listOfPossiblePlates(0);
+                PossiblePlate licPlate = listOfPossiblePlates[0];
                 //(the first plate in sorted by string length descending order)
                 //is the actual plate
 
@@ -151,12 +155,14 @@ namespace License_Plate_Recognition
         {
             if ((cbShowSteps.Checked == false))
             {
+                cbShowStepsChecked = false;
                 //tableLayoutPanel.RowStyles. = IMAGE_BOX_PCT_SHOW_STEPS_NOT_CHECKED;
                 ////if showing steps, show more of the text box
                 //tableLayoutPanel.RowStyles.Item(2).Height = TEXT_BOX_PCT_SHOW_STEPS_NOT_CHECKED;
             }
             else if ((cbShowSteps.Checked == true))
             {
+                cbShowStepsChecked = true;
                 //tableLayoutPanel.RowStyles.Item(1).Height = IMAGE_BOX_PCT_SHOW_STEPS_CHECKED;
                 ////if not showing steps, show less of the text box
                 //tableLayoutPanel.RowStyles.Item(2).Height = TEXT_BOX_PCT_SHOW_STEPS_CHECKED;
@@ -202,7 +208,7 @@ namespace License_Plate_Recognition
             }
 
             //if image opened as empty
-            if ((imgOriginalScene.IsEmpty()))
+            if ((imgOriginalScene.IsEmpty))
             {
                 lblChosenFile.Text = "unable to open image, image was empty";
                 //show error message on label
@@ -222,11 +228,11 @@ namespace License_Plate_Recognition
             ptfRectPoints = licPlate.rrLocationOfPlateInScene.GetVertices();
             //get 4 vertices of rotated rect
 
-            Point pt0 = new Point(Convert.ToInt32(ptfRectPoints(0).X), Convert.ToInt32(ptfRectPoints(0).Y));
+            Point pt0 = new Point(Convert.ToInt32(ptfRectPoints[0].X), Convert.ToInt32(ptfRectPoints[0].Y));
             //declare 4 points, integer type
-            Point pt1 = new Point(Convert.ToInt32(ptfRectPoints(1).X), Convert.ToInt32(ptfRectPoints(1).Y));
-            Point pt2 = new Point(Convert.ToInt32(ptfRectPoints(2).X), Convert.ToInt32(ptfRectPoints(2).Y));
-            Point pt3 = new Point(Convert.ToInt32(ptfRectPoints(3).X), Convert.ToInt32(ptfRectPoints(3).Y));
+            Point pt1 = new Point(Convert.ToInt32(ptfRectPoints[1].X), Convert.ToInt32(ptfRectPoints[1].Y));
+            Point pt2 = new Point(Convert.ToInt32(ptfRectPoints[2].X), Convert.ToInt32(ptfRectPoints[2].Y));
+            Point pt3 = new Point(Convert.ToInt32(ptfRectPoints[3].X), Convert.ToInt32(ptfRectPoints[3].Y));
 
             CvInvoke.Line(imgOriginalScene, pt0, pt1, SCALAR_RED, 2);
             //draw 4 red lines
@@ -243,7 +249,7 @@ namespace License_Plate_Recognition
             Point ptLowerLeftTextOrigin = new Point();
             //this will be the bottom left of the area that the text will be written to
 
-            FontFace fontFace = fontFace.HersheySimplex;
+            FontFace fontFace = FontFace.HersheySimplex;
             //choose a plain jane font
             double dblFontScale = licPlate.imgPlate.Height / 30;
             //base font scale on height of plate area
@@ -262,12 +268,12 @@ namespace License_Plate_Recognition
             //if the license plate is in the upper 3/4 of the image, we will write the chars in below the plate
             if ((licPlate.rrLocationOfPlateInScene.Center.Y < (imgOriginalScene.Height * 0.75)))
             {
-                ptCenterOfTextArea.Y = Convert.ToInt32(licPlate.rrLocationOfPlateInScene.Center.Y + Convert.ToInt32(Convert.ToDouble(licPlate.rrLocationOfPlateInScene.MinAreaRect.Height) * 1.6));
+                ptCenterOfTextArea.Y = Convert.ToInt32(licPlate.rrLocationOfPlateInScene.Center.Y + Convert.ToInt32(Convert.ToDouble(licPlate.rrLocationOfPlateInScene.MinAreaRect().Height) * 1.6));
                 //else if the license plate is in the lower 1/4 of the image, we will write the chars in above the plate
             }
             else
             {
-                ptCenterOfTextArea.Y = Convert.ToInt32(licPlate.rrLocationOfPlateInScene.Center.Y - Convert.ToInt32(Convert.ToDouble(licPlate.rrLocationOfPlateInScene.MinAreaRect.Height) * 1.6));
+                ptCenterOfTextArea.Y = Convert.ToInt32(licPlate.rrLocationOfPlateInScene.Center.Y - Convert.ToInt32(Convert.ToDouble(licPlate.rrLocationOfPlateInScene.MinAreaRect().Height) * 1.6));
             }
 
             ptLowerLeftTextOrigin.X = Convert.ToInt32(ptCenterOfTextArea.X - (textSize.Width / 2));

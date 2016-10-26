@@ -23,10 +23,11 @@ using System.Drawing;
 //
 namespace License_Plate_Recognition
 {
-    static class DetectPlates
+    public class DetectPlates
     {
 
-
+        frmMain frm = new frmMain();
+        DetectChars detectChars = new DetectChars();
         // module level variables ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         const double PLATE_WIDTH_PADDING_FACTOR = 1.3;
 
@@ -35,7 +36,7 @@ namespace License_Plate_Recognition
 
         static MCvScalar SCALAR_RED = new MCvScalar(0.0, 0.0, 255.0);
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static List<PossiblePlate> detectPlatesInScene(Mat imgOriginalScene)
+        public  List<PossiblePlate> detectPlatesInScene(Mat imgOriginalScene)
         {
             List<PossiblePlate> listOfPossiblePlates = new List<PossiblePlate>();
             //this will be the return value
@@ -49,17 +50,17 @@ namespace License_Plate_Recognition
             CvInvoke.DestroyAllWindows();
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
                 CvInvoke.Imshow("0", imgOriginalScene);
             }
             // show steps '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-            Preprocess.preprocess(imgOriginalScene, imgGrayscaleScene, imgThreshScene);
+            Preprocess.preprocess(imgOriginalScene,ref imgGrayscaleScene,ref imgThreshScene);
             //preprocess to get grayscale and threshold images
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
                 CvInvoke.Imshow("1a", imgGrayscaleScene);
                 CvInvoke.Imshow("1b", imgThreshScene);
@@ -71,9 +72,9 @@ namespace License_Plate_Recognition
             List<PossibleChar> listOfPossibleCharsInScene = findPossibleCharsInScene(imgThreshScene);
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
-                frmMain.txtInfo.AppendText("step 2 - listOfPossibleCharsInScene.Count = " + listOfPossibleCharsInScene.Count.ToString() + "\r\n");
+                frm.txtInfo.AppendText("step 2 - listOfPossibleCharsInScene.Count = " + listOfPossibleCharsInScene.Count.ToString() + "\r\n");
                 //131 with MCLRNF1 image
 
                 VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
@@ -90,12 +91,12 @@ namespace License_Plate_Recognition
 
             //given a list of all possible chars, find groups of matching chars
             //in the next steps each group of matching chars will attempt to be recognized as a plate
-            List<List<PossibleChar>> listOfListsOfMatchingCharsInScene = findListOfListsOfMatchingChars[listOfPossibleCharsInScene];
+            List<List<PossibleChar>> listOfListsOfMatchingCharsInScene = detectChars.findListOfListsOfMatchingChars(listOfPossibleCharsInScene);
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
-                frmMain.txtInfo.AppendText("step 3 - listOfListsOfMatchingCharsInScene.Count = " + listOfListsOfMatchingCharsInScene.Count.ToString() + "\r\n");
+                frm.txtInfo.AppendText("step 3 - listOfListsOfMatchingCharsInScene.Count = " + listOfListsOfMatchingCharsInScene.Count.ToString() + "\r\n");
                 //13 with MCLRNF1 image
 
                 imgContours = new Mat(imgOriginalScene.Size, DepthType.Cv8U, 3);
@@ -123,7 +124,7 @@ namespace License_Plate_Recognition
             //for each group of matching chars
             foreach (List<PossibleChar> listOfMatchingChars in listOfListsOfMatchingCharsInScene)
             {
-                object possiblePlate = extractPlate(imgOriginalScene, listOfMatchingChars);
+                PossiblePlate possiblePlate = extractPlate(imgOriginalScene, listOfMatchingChars);
                 //attempt to extract plate
 
                 //if plate was found
@@ -134,13 +135,13 @@ namespace License_Plate_Recognition
                 }
             }
 
-            frmMain.txtInfo.AppendText("\r\n" + listOfPossiblePlates.Count.ToString() + " possible plates found" + "\r\n");
+            frm.txtInfo.AppendText("\r\n" + listOfPossiblePlates.Count.ToString() + " possible plates found" + "\r\n");
             //update text box with # of plates found
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
-                frmMain.txtInfo.AppendText("\r\n");
+                frm.txtInfo.AppendText("\r\n");
                 CvInvoke.Imshow("4a", imgContours);
 
                 for (int i = 0; i <= listOfPossiblePlates.Count - 1; i++)
@@ -160,11 +161,11 @@ namespace License_Plate_Recognition
                     CvInvoke.Line(imgContours, pt3, pt0, SCALAR_RED, 2);
 
                     CvInvoke.Imshow("4a", imgContours);
-                    frmMain.txtInfo.AppendText("possible plate " + i.ToString() + ", click on any image and press a key to continue . . ." + "\r\n");
+                    frm.txtInfo.AppendText("possible plate " + i.ToString() + ", click on any image and press a key to continue . . ." + "\r\n");
                     CvInvoke.Imshow("4b", listOfPossiblePlates[i].imgPlate);
                     CvInvoke.WaitKey(0);
                 }
-                frmMain.txtInfo.AppendText("\r\n" + "plate detection complete, click on any image and press a key to begin char recognition . . ." + "\r\n" + "\r\n");
+                frm.txtInfo.AppendText("\r\n" + "plate detection complete, click on any image and press a key to begin char recognition . . ." + "\r\n" + "\r\n");
                 CvInvoke.WaitKey(0);
             }
             // show steps '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -173,7 +174,7 @@ namespace License_Plate_Recognition
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static List<PossibleChar> findPossibleCharsInScene(Mat imgThresh)
+        public   List<PossibleChar> findPossibleCharsInScene(Mat imgThresh)
         {
             List<PossibleChar> listOfPossibleChars = new List<PossibleChar>();
             //this is the return value
@@ -192,7 +193,7 @@ namespace License_Plate_Recognition
             for (int i = 0; i <= contours.Size - 1; i++)
             {
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     CvInvoke.DrawContours(imgContours, contours, i, SCALAR_WHITE);
                 }
@@ -201,7 +202,7 @@ namespace License_Plate_Recognition
                 PossibleChar possibleChar = new PossibleChar(contours[i]);
 
                 //if contour is a possible char, note this does not compare to other chars (yet) . . .
-                if ((DetectChars.checkIfPossibleChar(possibleChar)))
+                if ((detectChars.checkIfPossibleChar(possibleChar)))
                 {
                     intCountOfPossibleChars = intCountOfPossibleChars + 1;
                     //increment count of possible chars
@@ -212,21 +213,21 @@ namespace License_Plate_Recognition
             }
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
-                frmMain.txtInfo.AppendText("\r\n" + "step 2 - contours.Size() = " + contours.Size.ToString() + "\r\n");
+                frm.txtInfo.AppendText("\r\n" + "step 2 - contours.Size() = " + contours.Size.ToString() + "\r\n");
                 //2362 with MCLRNF1 image
-                frmMain.txtInfo.AppendText("step 2 - intCountOfPossibleChars = " + intCountOfPossibleChars.ToString() + "\r\n");
+                frm.txtInfo.AppendText("step 2 - intCountOfPossibleChars = " + intCountOfPossibleChars.ToString() + "\r\n");
                 //131 with MCLRNF1 image 
-                CvInvoke.imshow("2a", imgContours);
-            } 
+                CvInvoke.Imshow("2a", imgContours);
+            }
             // show steps '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
             return listOfPossibleChars;
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static PossiblePlate extractPlate(Mat imgOriginal, List<PossibleChar> listOfMatchingChars)
+        public   PossiblePlate extractPlate(Mat imgOriginal, List<PossibleChar> listOfMatchingChars)
         {
             PossiblePlate possiblePlate = new PossiblePlate();
             //this will be the return value
@@ -235,12 +236,12 @@ namespace License_Plate_Recognition
             listOfMatchingChars.Sort((firstChar, secondChar) => firstChar.intCenterX.CompareTo(secondChar.intCenterX));
 
             //calculate the center point of the plate
-            double dblPlateCenterX = Convert.ToDouble(listOfMatchingChars(0).intCenterX + listOfMatchingChars(listOfMatchingChars.Count - 1).intCenterX) / 2.0;
-            double dblPlateCenterY = Convert.ToDouble(listOfMatchingChars(0).intCenterY + listOfMatchingChars(listOfMatchingChars.Count - 1).intCenterY) / 2.0;
+            double dblPlateCenterX = Convert.ToDouble(listOfMatchingChars[0].intCenterX + listOfMatchingChars[listOfMatchingChars.Count - 1].intCenterX) / 2.0;
+            double dblPlateCenterY = Convert.ToDouble(listOfMatchingChars[0].intCenterY + listOfMatchingChars[listOfMatchingChars.Count - 1].intCenterY) / 2.0;
             PointF ptfPlateCenter = new PointF(Convert.ToSingle(dblPlateCenterX), Convert.ToSingle(dblPlateCenterY));
 
             //calculate plate width and height
-            int intPlateWidth = Convert.ToInt32(Convert.ToDouble(listOfMatchingChars(listOfMatchingChars.Count - 1).boundingRect.X + listOfMatchingChars(listOfMatchingChars.Count - 1).boundingRect.Width - listOfMatchingChars(0).boundingRect.X) * PLATE_WIDTH_PADDING_FACTOR);
+            int intPlateWidth = Convert.ToInt32(Convert.ToDouble(listOfMatchingChars[listOfMatchingChars.Count - 1].boundingRect.X + listOfMatchingChars[listOfMatchingChars.Count - 1].boundingRect.Width - listOfMatchingChars[0].boundingRect.X) * PLATE_WIDTH_PADDING_FACTOR);
 
             int intTotalOfCharHeights = 0;
 
@@ -249,13 +250,13 @@ namespace License_Plate_Recognition
                 intTotalOfCharHeights = intTotalOfCharHeights + matchingChar.boundingRect.Height;
             }
 
-            object dblAverageCharHeight = Convert.ToDouble(intTotalOfCharHeights) / Convert.ToDouble(listOfMatchingChars.Count);
+            double dblAverageCharHeight = Convert.ToDouble(intTotalOfCharHeights) / Convert.ToDouble(listOfMatchingChars.Count);
 
             object intPlateHeight = Convert.ToInt32(dblAverageCharHeight * PLATE_HEIGHT_PADDING_FACTOR);
 
             //calculate correction angle of plate region
-            double dblOpposite = listOfMatchingChars(listOfMatchingChars.Count - 1).intCenterY - listOfMatchingChars(0).intCenterY;
-            double dblHypotenuse = DetectChars.distanceBetweenChars(listOfMatchingChars(0), listOfMatchingChars(listOfMatchingChars.Count - 1));
+            double dblOpposite = listOfMatchingChars[listOfMatchingChars.Count - 1].intCenterY - listOfMatchingChars[0].intCenterY;
+            double dblHypotenuse = detectChars.distanceBetweenChars(listOfMatchingChars[0], listOfMatchingChars[listOfMatchingChars.Count - 1]);
             double dblCorrectionAngleInRad = Math.Asin(dblOpposite / dblHypotenuse);
             double dblCorrectionAngleInDeg = dblCorrectionAngleInRad * (180.0 / Math.PI);
 
@@ -274,7 +275,7 @@ namespace License_Plate_Recognition
             //rotate the entire image
 
             //crop out the actual plate portion of the rotated image
-            CvInvoke.GetRectSubPix(imgRotated, possiblePlate.rrLocationOfPlateInScene.MinAreaRect.Size, possiblePlate.rrLocationOfPlateInScene.Center, imgCropped);
+            CvInvoke.GetRectSubPix(imgRotated, possiblePlate.rrLocationOfPlateInScene.MinAreaRect().Size, possiblePlate.rrLocationOfPlateInScene.Center, imgCropped);
 
             possiblePlate.imgPlate = imgCropped;
             //copy the cropped plate image into the applicable member variable of the possible plate

@@ -36,9 +36,9 @@ using System.Drawing;
 
 namespace License_Plate_Recognition
 {
-    static class DetectChars
+    public  class DetectChars:frmMain
     {
-
+        frmMain frm = new frmMain();
         // module level variables ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         //constants for checkIfPossibleChar, this checks one possible char only (does not compare to another char)
         const int MIN_PIXEL_WIDTH = 2;
@@ -73,7 +73,7 @@ namespace License_Plate_Recognition
         static KNearest kNearest = new KNearest();
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static bool loadKNNDataAndTrainKNN()
+        public bool loadKNNDataAndTrainKNN()
         {
             //note: we effectively have to read the first XML file twice
             //first, we read the file to get the number of rows (which is the same as the number of samples)
@@ -87,42 +87,42 @@ namespace License_Plate_Recognition
             //we will resize these when we know the number of rows (i.e. number of training samples)
 
             List<int> intValidChars = new List<int>(new int[] {
-            Strings.Asc("0"),
-            Strings.Asc("1"),
-            Strings.Asc("2"),
-            Strings.Asc("3"),
-            Strings.Asc("4"),
-            Strings.Asc("5"),
-            Strings.Asc("6"),
-            Strings.Asc("7"),
-            Strings.Asc("8"),
-            Strings.Asc("9"),
-            Strings.Asc("A"),
-            Strings.Asc("B"),
-            Strings.Asc("C"),
-            Strings.Asc("D"),
-            Strings.Asc("E"),
-            Strings.Asc("F"),
-            Strings.Asc("G"),
-            Strings.Asc("H"),
-            Strings.Asc("I"),
-            Strings.Asc("J"),
-            Strings.Asc("K"),
-            Strings.Asc("L"),
-            Strings.Asc("M"),
-            Strings.Asc("N"),
-            Strings.Asc("O"),
-            Strings.Asc("P"),
-            Strings.Asc("Q"),
-            Strings.Asc("R"),
-            Strings.Asc("S"),
-            Strings.Asc("T"),
-            Strings.Asc("U"),
-            Strings.Asc("V"),
-            Strings.Asc("W"),
-            Strings.Asc("X"),
-            Strings.Asc("Y"),
-            Strings.Asc("Z")
+           (int)'0',
+           (int)'1',
+           (int)'2',
+           (int)'3',
+           (int)'4',
+           (int)'5',
+           (int)'6',
+           (int)'7',
+           (int)'8',
+           (int)'9',
+           (int)'A',
+           (int)'B',
+           (int)'C',
+           (int)'D',
+           (int)'E',
+           (int)'F',
+           (int)'G',
+           (int)'H',
+           (int)'I',
+           (int)'J',
+           (int)'K',
+           (int)'L',
+           (int)'M',
+           (int)'N',
+           (int)'O',
+           (int)'P',
+           (int)'Q',
+           (int)'R',
+           (int)'S',
+           (int)'T',
+           (int)'U',
+           (int)'V',
+           (int)'W',
+           (int)'X',
+           (int)'Y',
+           (int)'Z'
         });
 
             XmlSerializer xmlSerializer = new XmlSerializer(mtxClassifications.GetType());
@@ -138,8 +138,8 @@ namespace License_Plate_Recognition
             }
             catch (Exception ex)
             {
-                frmMain.txtInfo.AppendText("\r\n" + "unable to open 'classifications.xml', error: ");
-                frmMain.txtInfo.AppendText(ex.Message + "\r\n");
+                frm.txtInfo.AppendText("\r\n" + "unable to open 'classifications.xml', error: ");
+                frm.txtInfo.AppendText(ex.Message + "\r\n");
                 return false;
             }
 
@@ -164,8 +164,8 @@ namespace License_Plate_Recognition
             }
             catch (Exception ex)
             {
-                frmMain.txtInfo.AppendText("\r\n" + "unable to open 'classifications.xml', error:" + "\r\n");
-                frmMain.txtInfo.AppendText(ex.Message + "\r\n" + "\r\n");
+                frm.txtInfo.AppendText("\r\n" + "unable to open 'classifications.xml', error:" + "\r\n");
+                frm.txtInfo.AppendText(ex.Message + "\r\n" + "\r\n");
                 return false;
             }
             //read from the classifications file again, this time we can get the actual data
@@ -184,8 +184,8 @@ namespace License_Plate_Recognition
             }
             catch (Exception ex)
             {
-                frmMain.txtInfo.AppendText("unable to open 'images.xml', error:" + "\r\n");
-                frmMain.txtInfo.AppendText(ex.Message + "\r\n" + "\r\n");
+                frm.txtInfo.AppendText("unable to open 'images.xml', error:" + "\r\n");
+                frm.txtInfo.AppendText(ex.Message + "\r\n" + "\r\n");
                 return false;
             }
 
@@ -205,7 +205,7 @@ namespace License_Plate_Recognition
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static List<PossiblePlate> detectCharsInPlates(List<PossiblePlate> listOfPossiblePlates)
+        public List<PossiblePlate> detectCharsInPlates(List<PossiblePlate> listOfPossiblePlates)
         {
             int intPlateCounter = 0;
             //this is only for showing steps
@@ -230,11 +230,11 @@ namespace License_Plate_Recognition
             // for each possible plate, this is a big for loop that takes up most of the function
             foreach (PossiblePlate possiblePlate in listOfPossiblePlates)
             {
-                Preprocess.preprocess(possiblePlate.imgPlate, possiblePlate.imgGrayscale, possiblePlate.imgThresh);
+                Preprocess.preprocess(possiblePlate.imgPlate, ref possiblePlate.imgGrayscale, ref possiblePlate.imgThresh);
                 //preprocess to get grayscale and threshold images
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     CvInvoke.Imshow("5a", possiblePlate.imgPlate);
                     CvInvoke.Imshow("5b", possiblePlate.imgGrayscale);
@@ -249,7 +249,7 @@ namespace License_Plate_Recognition
                 //threshold again to eliminate any gray areas
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     CvInvoke.Imshow("5d", possiblePlate.imgThresh);
                 }
@@ -260,7 +260,7 @@ namespace License_Plate_Recognition
                 List<PossibleChar> listOfPossibleCharsInPlate = findPossibleCharsInPlate(possiblePlate.imgGrayscale, possiblePlate.imgThresh);
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     imgContours = new Mat(possiblePlate.imgThresh.Size, DepthType.Cv8U, 3);
                     VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
@@ -281,7 +281,7 @@ namespace License_Plate_Recognition
                 List<List<PossibleChar>> listOfListsOfMatchingCharsInPlate = findListOfListsOfMatchingChars(listOfPossibleCharsInPlate);
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     imgContours = new Mat(possiblePlate.imgThresh.Size, DepthType.Cv8U, 3);
 
@@ -308,9 +308,9 @@ namespace License_Plate_Recognition
                 if ((listOfListsOfMatchingCharsInPlate == null))
                 {
                     // show steps '''''''''''''''''''''''''
-                    if ((frmMain.cbShowSteps.Checked == true))
+                    if ((frm.cbShowSteps.Checked == true))
                     {
-                        frmMain.txtInfo.AppendText("chars found in plate number " + intPlateCounter.ToString() + " = (none), click on any image and press a key to continue . . ." + "\r\n");
+                        frm.txtInfo.AppendText("chars found in plate number " + intPlateCounter.ToString() + " = (none), click on any image and press a key to continue . . ." + "\r\n");
                         intPlateCounter = intPlateCounter + 1;
                         CvInvoke.DestroyWindow("8");
                         CvInvoke.DestroyWindow("9");
@@ -327,9 +327,9 @@ namespace License_Plate_Recognition
                 else if ((listOfListsOfMatchingCharsInPlate.Count == 0))
                 {
                     // show steps '''''''''''''''''''''''''
-                    if ((frmMain.cbShowSteps.Checked == true))
+                    if ((frm.cbShowSteps.Checked == true))
                     {
-                        frmMain.txtInfo.AppendText("chars found in plate number " + intPlateCounter.ToString() + " = (none), click on any image and press a key to continue . . ." + "\r\n");
+                        frm.txtInfo.AppendText("chars found in plate number " + intPlateCounter.ToString() + " = (none), click on any image and press a key to continue . . ." + "\r\n");
                         intPlateCounter = intPlateCounter + 1;
                         CvInvoke.DestroyWindow("8");
                         CvInvoke.DestroyWindow("9");
@@ -356,7 +356,7 @@ namespace License_Plate_Recognition
                 }
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     imgContours = new Mat(possiblePlate.imgThresh.Size, DepthType.Cv8U, 3);
 
@@ -395,7 +395,7 @@ namespace License_Plate_Recognition
                 List<PossibleChar> longestListOfMatchingCharsInPlate = listOfListsOfMatchingCharsInPlate[intIndexOfLongestListOfChars];
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
                     imgContours = new Mat(possiblePlate.imgThresh.Size, DepthType.Cv8U, 3);
 
@@ -416,9 +416,9 @@ namespace License_Plate_Recognition
                 //perform char recognition on the longest list of matching chars in the plate
 
                 // show steps '''''''''''''''''''''''''''''
-                if ((frmMain.cbShowSteps.Checked == true))
+                if ((frm.cbShowSteps.Checked == true))
                 {
-                    frmMain.txtInfo.AppendText("chars found in plate number " + intPlateCounter.ToString() + " = " + possiblePlate.strChars + ", click on any image and press a key to continue . . ." + "\r\n");
+                    frm.txtInfo.AppendText("chars found in plate number " + intPlateCounter.ToString() + " = " + possiblePlate.strChars + ", click on any image and press a key to continue . . ." + "\r\n");
                     intPlateCounter = intPlateCounter + 1;
                     CvInvoke.WaitKey(0);
                 }
@@ -427,9 +427,9 @@ namespace License_Plate_Recognition
             //end for each possible plate big for loop that takes up most of the function
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
-                frmMain.txtInfo.AppendText("\r\n" + "char detection complete, click on any image and press a key to continue . . ." + "\r\n");
+                frm.txtInfo.AppendText("\r\n" + "char detection complete, click on any image and press a key to continue . . ." + "\r\n");
                 CvInvoke.WaitKey(0);
             }
             // show steps '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -438,7 +438,7 @@ namespace License_Plate_Recognition
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static List<PossibleChar> findPossibleCharsInPlate(Mat imgGrayscale, Mat imgThresh)
+        public  List<PossibleChar> findPossibleCharsInPlate(Mat imgGrayscale, Mat imgThresh)
         {
             List<PossibleChar> listOfPossibleChars = new List<PossibleChar>();
             //this will be the return value
@@ -470,7 +470,7 @@ namespace License_Plate_Recognition
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static bool checkIfPossibleChar(PossibleChar possibleChar)
+        public   bool checkIfPossibleChar(PossibleChar possibleChar)
         {
             //this function is a 'first pass' that does a rough check on a contour to see if it could be a char,
             //note that we are not (yet) comparing the char to other chars to look for a group
@@ -485,7 +485,7 @@ namespace License_Plate_Recognition
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static List<List<PossibleChar>> findListOfListsOfMatchingChars(List<PossibleChar> listOfPossibleChars)
+        public   List<List<PossibleChar>> findListOfListsOfMatchingChars(List<PossibleChar> listOfPossibleChars)
         {
             //with this function, we start off with all the possible chars in one big list
             //the purpose of this function is to re-arrange the one big list of chars into a list of lists of matching chars,
@@ -539,7 +539,7 @@ namespace License_Plate_Recognition
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        public static List<PossibleChar> findListOfMatchingChars(PossibleChar possibleChar, List<PossibleChar> listOfChars)
+        public   List<PossibleChar> findListOfMatchingChars(PossibleChar possibleChar, List<PossibleChar> listOfChars)
         {
             //the purpose of this function is, given a possible char and a big list of possible chars,
             //find all chars in the big list that are a match for the single possible char, and return those matching chars as a list
@@ -583,7 +583,7 @@ namespace License_Plate_Recognition
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         //use Pythagorean theorem to calculate distance between two chars
-        public static double distanceBetweenChars(PossibleChar firstChar, PossibleChar secondChar)
+        public   double distanceBetweenChars(PossibleChar firstChar, PossibleChar secondChar)
         {
             int intX = Math.Abs(firstChar.intCenterX - secondChar.intCenterX);
             int intY = Math.Abs(firstChar.intCenterY - secondChar.intCenterY);
@@ -593,7 +593,7 @@ namespace License_Plate_Recognition
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         //use basic trigonometry (SOH CAH TOA) to calculate angle between chars
-        public static double angleBetweenChars(PossibleChar firstChar, PossibleChar secondChar)
+        public   double angleBetweenChars(PossibleChar firstChar, PossibleChar secondChar)
         {
             double dblAdj = Convert.ToDouble(Math.Abs(firstChar.intCenterX - secondChar.intCenterX));
             double dblOpp = Convert.ToDouble(Math.Abs(firstChar.intCenterY - secondChar.intCenterY));
@@ -609,7 +609,7 @@ namespace License_Plate_Recognition
         //if we have two chars overlapping or to close to each other to possibly be separate chars, remove the inner (smaller) char,
         //this is to prevent including the same char twice if two contours are found for the same char,
         //for example for the letter 'O' both the inner ring and the outer ring may be found as contours, but we should only include the char once
-        public static List<PossibleChar> removeInnerOverlappingChars(List<PossibleChar> listOfMatchingChars)
+        public   List<PossibleChar> removeInnerOverlappingChars(List<PossibleChar> listOfMatchingChars)
         {
             List<PossibleChar> listOfMatchingCharsWithInnerCharRemoved = new List<PossibleChar>(listOfMatchingChars);
 
@@ -656,7 +656,7 @@ namespace License_Plate_Recognition
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         //this is where we apply the actual char recognition
-        public static string recognizeCharsInPlate(Mat imgThresh, List<PossibleChar> listOfMatchingChars)
+        public   string recognizeCharsInPlate(Mat imgThresh, List<PossibleChar> listOfMatchingChars)
         {
             string strChars = "";
             //this will be the return value, the chars in the lic plate
@@ -708,12 +708,12 @@ namespace License_Plate_Recognition
                 sngCurrentChar = kNearest.Predict(mtxTempReshaped);
                 //finally we can call Predict !!!
 
-                strChars = strChars + sngCurrentChar.ToString());
+                strChars = strChars + (char)sngCurrentChar;
                 //append current char to full string of chars
             }
 
             // show steps '''''''''''''''''''''''''''''''''
-            if ((frmMain.cbShowSteps.Checked == true))
+            if ((frm.cbShowSteps.Checked == true))
             {
                 CvInvoke.Imshow("10", imgThreshColor);
             }
@@ -722,4 +722,5 @@ namespace License_Plate_Recognition
             return strChars;
             //return result
         }
+    }
     }
