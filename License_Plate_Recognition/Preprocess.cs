@@ -24,7 +24,7 @@ namespace License_Plate_Recognition
     {
 
         // module level variables ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        const int GAUSSIAN_BLUR_FILTER_SIZE = 5;
+        const int GAUSSIAN_BLUR_FILTER_SIZE = 7;
         const int ADAPTIVE_THRESH_BLOCK_SIZE = 19;
 
         const int ADAPTIVE_THRESH_WEIGHT = 9;
@@ -44,6 +44,13 @@ namespace License_Plate_Recognition
 
             //adaptive threshold to get imgThresh
             CvInvoke.AdaptiveThreshold(imgBlurred, imgThresh, 255.0, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, ADAPTIVE_THRESH_BLOCK_SIZE, ADAPTIVE_THRESH_WEIGHT);
+
+            MCvScalar tempVal=CvInvoke.Mean(imgBlurred);
+            double average = tempVal.V0;
+            CvInvoke.Threshold(imgBlurred, imgThresh, 0, 255.0, Emgu.CV.CvEnum.ThresholdType.Otsu);
+            CvInvoke.Dilate(imgThresh, imgThresh, null, Point.Empty, 1, BorderType.Default, new MCvScalar(0));
+            CvInvoke.Erode(imgThresh, imgThresh,null, Point.Empty, 1, BorderType.Default, new MCvScalar(0));
+            CvInvoke.BitwiseNot(imgThresh, imgThresh);
         }
 
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
