@@ -26,8 +26,8 @@ namespace License_Plate_Recognition
     public class DetectPlates
     {
 
-        frmMain frm = new frmMain();
-        DetectChars detectChars = new DetectChars();
+        frmMain frm;
+        DetectChars detectChars;
         // module level variables ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         const double PLATE_WIDTH_PADDING_FACTOR = 1.3;
 
@@ -35,6 +35,11 @@ namespace License_Plate_Recognition
         static MCvScalar SCALAR_WHITE = new MCvScalar(255.0, 255.0, 255.0);
 
         static MCvScalar SCALAR_RED = new MCvScalar(0.0, 0.0, 255.0);
+        public DetectPlates(frmMain frmmain)
+        {
+            frm = frmmain;
+            detectChars = frm.detectChars;
+        }
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         public  List<PossiblePlate> detectPlatesInScene(Mat imgOriginalScene)
         {

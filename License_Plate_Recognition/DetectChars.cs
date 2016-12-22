@@ -36,26 +36,26 @@ using System.Drawing;
 
 namespace License_Plate_Recognition
 {
-    public  class DetectChars:frmMain
+    public  class DetectChars
     {
-        frmMain frm = new frmMain();
+        frmMain frm;
         // module level variables ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         //constants for checkIfPossibleChar, this checks one possible char only (does not compare to another char)
         const int MIN_PIXEL_WIDTH = 2;
 
         const int MIN_PIXEL_HEIGHT = 8;
-        const double MIN_ASPECT_RATIO = 0.25;
+        const double MIN_ASPECT_RATIO = 0.15;
 
         const double MAX_ASPECT_RATIO = 1.0;
 
         const int MIN_RECT_AREA = 80;
         //constants for comparing two chars
-        const double MIN_DIAG_SIZE_MULTIPLE_AWAY = 0.3;
+        const double MIN_DIAG_SIZE_MULTIPLE_AWAY = 0.2;
 
         const double MAX_DIAG_SIZE_MULTIPLE_AWAY = 5.0;
 
         const double MAX_CHANGE_IN_AREA = 0.5;
-        const double MAX_CHANGE_IN_WIDTH = 0.8;
+        const double MAX_CHANGE_IN_WIDTH = 0.9;
 
         const double MAX_CHANGE_IN_HEIGHT = 0.2;
 
@@ -71,7 +71,10 @@ namespace License_Plate_Recognition
         static MCvScalar SCALAR_GREEN = new MCvScalar(0.0, 255.0, 0.0);
         //variables
         static KNearest kNearest = new KNearest();
-
+        public DetectChars(frmMain frmmain)
+        {
+             frm = frmmain;
+        }
         ///''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         public bool loadKNNDataAndTrainKNN()
         {
@@ -569,7 +572,11 @@ namespace License_Plate_Recognition
 
                 //check if chars match
 
-                if ((dblDistanceBetweenChars < (possibleChar.dblDiagonalSize * MAX_DIAG_SIZE_MULTIPLE_AWAY) & dblAngleBetweenChars < MAX_ANGLE_BETWEEN_CHARS & dblChangeInArea < MAX_CHANGE_IN_AREA & dblChangeInWidth < MAX_CHANGE_IN_WIDTH & dblChangeInHeight < MAX_CHANGE_IN_HEIGHT))
+                if ((dblDistanceBetweenChars < (possibleChar.dblDiagonalSize * MAX_DIAG_SIZE_MULTIPLE_AWAY) 
+                    & dblAngleBetweenChars < MAX_ANGLE_BETWEEN_CHARS 
+                    & dblChangeInArea < MAX_CHANGE_IN_AREA 
+                    & dblChangeInWidth < MAX_CHANGE_IN_WIDTH 
+                    & dblChangeInHeight < MAX_CHANGE_IN_HEIGHT))
                 {
                     listOfMatchingChars.Add(possibleMatchingChar);
                     //if the chars are a match, add the current char to list of matching chars

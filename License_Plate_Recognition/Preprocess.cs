@@ -40,7 +40,7 @@ namespace License_Plate_Recognition
 
             Mat imgBlurred = new Mat();
 
-            CvInvoke.GaussianBlur(imgMaxContrastGrayscale, imgBlurred, new Size(GAUSSIAN_BLUR_FILTER_SIZE, GAUSSIAN_BLUR_FILTER_SIZE), 0);
+            CvInvoke.GaussianBlur(imgMaxContrastGrayscale, imgBlurred, new Size(GAUSSIAN_BLUR_FILTER_SIZE, GAUSSIAN_BLUR_FILTER_SIZE), 0.6);
             //gaussian blur
 
             //adaptive threshold to get imgThresh

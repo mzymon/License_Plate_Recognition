@@ -61,7 +61,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(673, 408);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(822, 551);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // btnOpenFile
@@ -80,7 +80,7 @@
             // lblChosenFile
             // 
             this.lblChosenFile.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblChosenFile.Location = new System.Drawing.Point(354, 0);
+            this.lblChosenFile.Location = new System.Drawing.Point(503, 0);
             this.lblChosenFile.Name = "lblChosenFile";
             this.lblChosenFile.Size = new System.Drawing.Size(125, 30);
             this.lblChosenFile.TabIndex = 1;
@@ -89,12 +89,12 @@
             // ibOriginal
             // 
             this.ibOriginal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel.SetColumnSpan(this.ibOriginal, 3);
+            this.tableLayoutPanel.SetColumnSpan(this.ibOriginal, 4);
             this.ibOriginal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ibOriginal.Enabled = false;
             this.ibOriginal.Location = new System.Drawing.Point(3, 33);
             this.ibOriginal.Name = "ibOriginal";
-            this.ibOriginal.Size = new System.Drawing.Size(586, 258);
+            this.ibOriginal.Size = new System.Drawing.Size(816, 358);
             this.ibOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ibOriginal.TabIndex = 2;
             this.ibOriginal.TabStop = false;
@@ -102,7 +102,7 @@
             // cbShowSteps
             // 
             this.cbShowSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbShowSteps.Location = new System.Drawing.Point(485, 3);
+            this.cbShowSteps.Location = new System.Drawing.Point(634, 3);
             this.cbShowSteps.Name = "cbShowSteps";
             this.cbShowSteps.Size = new System.Drawing.Size(104, 24);
             this.cbShowSteps.TabIndex = 3;
@@ -112,13 +112,13 @@
             // 
             // txtInfo
             // 
-            this.tableLayoutPanel.SetColumnSpan(this.txtInfo, 3);
+            this.tableLayoutPanel.SetColumnSpan(this.txtInfo, 4);
             this.txtInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtInfo.Location = new System.Drawing.Point(3, 297);
+            this.txtInfo.Location = new System.Drawing.Point(3, 397);
             this.txtInfo.Multiline = true;
             this.txtInfo.Name = "txtInfo";
             this.txtInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtInfo.Size = new System.Drawing.Size(586, 108);
+            this.txtInfo.Size = new System.Drawing.Size(816, 151);
             this.txtInfo.TabIndex = 4;
             this.txtInfo.WordWrap = false;
             // 
@@ -128,7 +128,7 @@
             // 
             // btnTrain
             // 
-            this.btnTrain.Location = new System.Drawing.Point(595, 3);
+            this.btnTrain.Location = new System.Drawing.Point(744, 3);
             this.btnTrain.Name = "btnTrain";
             this.btnTrain.Size = new System.Drawing.Size(75, 23);
             this.btnTrain.TabIndex = 5;
@@ -140,7 +140,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(673, 408);
+            this.ClientSize = new System.Drawing.Size(822, 551);
             this.Controls.Add(this.tableLayoutPanel);
             this.Name = "frmMain";
             this.Text = "Form1";

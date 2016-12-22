@@ -94,14 +94,15 @@
             // 
             this.ofdOpenFile.FileName = "openFileDialog1";
             // 
-            // frmMain
+            // frmTrain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1158, 719);
             this.Controls.Add(this.tableLayoutPanel);
-            this.Name = "frmMain";
-            this.Text = "Form1";
+            this.Name = "frmTrain";
+            this.Text = "Training";
+            this.Load += new System.EventHandler(this.frmTrain_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);

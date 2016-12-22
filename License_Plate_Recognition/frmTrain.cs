@@ -30,6 +30,11 @@ namespace License_Plate_Recognition
             InitializeComponent();
         }
 
+        private void frmTrain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            CvInvoke.DestroyAllWindows();
+        }
+
         private void btnOpenTrainingImage_Click(object sender, EventArgs e)
         {
             DialogResult drChosenFile = default(DialogResult);
@@ -96,14 +101,8 @@ namespace License_Plate_Recognition
                                                                   (int)'K', (int)'L', (int)'M', (int)'N', (int)'O', (int)'P', (int)'Q', (int)'R', (int)'S', (int)'T',
                                                                   (int)'U', (int)'V', (int)'W', (int)'X', (int)'Y', (int)'Z' };
 
-            CvInvoke.CvtColor(imgTrainingNumbers, imgGrayscale, ColorConversion.Bgr2Gray);
-            //convert to grayscale
-
-            CvInvoke.GaussianBlur(imgGrayscale, imgBlurred, new Size(5, 5), 0);
-            //blur
-
-            //threshold image from grayscale to black and white
-            CvInvoke.AdaptiveThreshold(imgBlurred, imgThresh, 255.0, AdaptiveThresholdType.GaussianC, ThresholdType.BinaryInv, 11, 2);
+            Preprocess.preprocess(imgTrainingNumbers, ref imgGrayscale, ref imgThresh);
+            
 
             CvInvoke.Imshow("imgThresh", imgThresh);
             //show threshold image for reference
@@ -251,6 +250,11 @@ namespace License_Plate_Recognition
 
 
 
+
+        }
+
+        private void frmTrain_Load(object sender, EventArgs e)
+        {
 
         }
     }

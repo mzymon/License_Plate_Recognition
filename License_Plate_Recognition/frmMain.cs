@@ -45,8 +45,8 @@ namespace License_Plate_Recognition
         {
             cbShowSteps_CheckedChanged(new object(), new EventArgs());
             //call check box event to update form based on check box initial state
-            detectPlates = new DetectPlates();
-            detectChars = new DetectChars();
+            detectChars = new DetectChars(this);
+            detectPlates = new DetectPlates(this);
             bool blnKNNTrainingSuccessful = detectChars.loadKNNDataAndTrainKNN();
             //attempt KNN training
 
