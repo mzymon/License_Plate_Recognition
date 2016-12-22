@@ -284,5 +284,11 @@ namespace License_Plate_Recognition
             CvInvoke.PutText(imgOriginalScene, licPlate.strChars, ptLowerLeftTextOrigin, fontFace, dblFontScale, SCALAR_YELLOW, intFontThickness);
             //write the text on the image
         }
+
+        private void btnTrain_Click(object sender, EventArgs e)
+        {
+            frmTrain train = new frmTrain();
+            train.Show();
+        }
     }
 }

@@ -36,21 +36,24 @@
             this.cbShowSteps = new System.Windows.Forms.CheckBox();
             this.txtInfo = new System.Windows.Forms.TextBox();
             this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
+            this.btnTrain = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ibOriginal)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
             // 
-            this.tableLayoutPanel.ColumnCount = 3;
+            this.tableLayoutPanel.ColumnCount = 4;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.Controls.Add(this.btnOpenFile, 0, 0);
             this.tableLayoutPanel.Controls.Add(this.lblChosenFile, 1, 0);
             this.tableLayoutPanel.Controls.Add(this.ibOriginal, 0, 1);
             this.tableLayoutPanel.Controls.Add(this.cbShowSteps, 2, 0);
             this.tableLayoutPanel.Controls.Add(this.txtInfo, 0, 2);
+            this.tableLayoutPanel.Controls.Add(this.btnTrain, 3, 0);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
@@ -58,7 +61,7 @@
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(608, 356);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(673, 408);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // btnOpenFile
@@ -77,7 +80,7 @@
             // lblChosenFile
             // 
             this.lblChosenFile.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblChosenFile.Location = new System.Drawing.Point(370, 0);
+            this.lblChosenFile.Location = new System.Drawing.Point(354, 0);
             this.lblChosenFile.Name = "lblChosenFile";
             this.lblChosenFile.Size = new System.Drawing.Size(125, 30);
             this.lblChosenFile.TabIndex = 1;
@@ -91,7 +94,7 @@
             this.ibOriginal.Enabled = false;
             this.ibOriginal.Location = new System.Drawing.Point(3, 33);
             this.ibOriginal.Name = "ibOriginal";
-            this.ibOriginal.Size = new System.Drawing.Size(602, 222);
+            this.ibOriginal.Size = new System.Drawing.Size(586, 258);
             this.ibOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ibOriginal.TabIndex = 2;
             this.ibOriginal.TabStop = false;
@@ -99,7 +102,7 @@
             // cbShowSteps
             // 
             this.cbShowSteps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbShowSteps.Location = new System.Drawing.Point(501, 3);
+            this.cbShowSteps.Location = new System.Drawing.Point(485, 3);
             this.cbShowSteps.Name = "cbShowSteps";
             this.cbShowSteps.Size = new System.Drawing.Size(104, 24);
             this.cbShowSteps.TabIndex = 3;
@@ -111,11 +114,11 @@
             // 
             this.tableLayoutPanel.SetColumnSpan(this.txtInfo, 3);
             this.txtInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtInfo.Location = new System.Drawing.Point(3, 261);
+            this.txtInfo.Location = new System.Drawing.Point(3, 297);
             this.txtInfo.Multiline = true;
             this.txtInfo.Name = "txtInfo";
             this.txtInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtInfo.Size = new System.Drawing.Size(602, 92);
+            this.txtInfo.Size = new System.Drawing.Size(586, 108);
             this.txtInfo.TabIndex = 4;
             this.txtInfo.WordWrap = false;
             // 
@@ -123,11 +126,21 @@
             // 
             this.ofdOpenFile.FileName = "openFileDialog1";
             // 
+            // btnTrain
+            // 
+            this.btnTrain.Location = new System.Drawing.Point(595, 3);
+            this.btnTrain.Name = "btnTrain";
+            this.btnTrain.Size = new System.Drawing.Size(75, 23);
+            this.btnTrain.TabIndex = 5;
+            this.btnTrain.Text = "Train";
+            this.btnTrain.UseVisualStyleBackColor = true;
+            this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(608, 356);
+            this.ClientSize = new System.Drawing.Size(673, 408);
             this.Controls.Add(this.tableLayoutPanel);
             this.Name = "frmMain";
             this.Text = "Form1";
@@ -148,6 +161,7 @@
         private System.Windows.Forms.OpenFileDialog ofdOpenFile;
         public System.Windows.Forms.CheckBox cbShowSteps;
         public System.Windows.Forms.TextBox txtInfo;
+        private System.Windows.Forms.Button btnTrain;
     }
 }
 

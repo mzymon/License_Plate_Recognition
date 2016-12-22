@@ -24,7 +24,7 @@ namespace License_Plate_Recognition
     {
 
         // module level variables ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        const int GAUSSIAN_BLUR_FILTER_SIZE = 7;
+        const int GAUSSIAN_BLUR_FILTER_SIZE = 3;
         const int ADAPTIVE_THRESH_BLOCK_SIZE = 19;
 
         const int ADAPTIVE_THRESH_WEIGHT = 9;
@@ -34,7 +34,8 @@ namespace License_Plate_Recognition
             imgGrayscale = extractValue(imgOriginal);
             //extract value channel only from original image to get imgGrayscale
 
-            Mat imgMaxContrastGrayscale = maximizeContrast(imgGrayscale);
+            Mat imgMaxContrastGrayscale = imgGrayscale;
+            //Mat imgMaxContrastGrayscale = maximizeContrast(imgGrayscale);
             //maximize contrast with top hat and black hat
 
             Mat imgBlurred = new Mat();
@@ -48,8 +49,11 @@ namespace License_Plate_Recognition
             MCvScalar tempVal=CvInvoke.Mean(imgBlurred);
             double average = tempVal.V0;
             CvInvoke.Threshold(imgBlurred, imgThresh, 0, 255.0, Emgu.CV.CvEnum.ThresholdType.Otsu);
+            CvInvoke.Erode(imgThresh, imgThresh, null, Point.Empty, 1, BorderType.Default, new MCvScalar(0));
             CvInvoke.Dilate(imgThresh, imgThresh, null, Point.Empty, 1, BorderType.Default, new MCvScalar(0));
-            CvInvoke.Erode(imgThresh, imgThresh,null, Point.Empty, 1, BorderType.Default, new MCvScalar(0));
+            
+           
+            
             CvInvoke.BitwiseNot(imgThresh, imgThresh);
         }
 
