@@ -35,8 +35,8 @@
             this.ibOriginal = new Emgu.CV.UI.ImageBox();
             this.cbShowSteps = new System.Windows.Forms.CheckBox();
             this.txtInfo = new System.Windows.Forms.TextBox();
-            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.btnTrain = new System.Windows.Forms.Button();
+            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ibOriginal)).BeginInit();
             this.SuspendLayout();
@@ -122,10 +122,6 @@
             this.txtInfo.TabIndex = 4;
             this.txtInfo.WordWrap = false;
             // 
-            // ofdOpenFile
-            // 
-            this.ofdOpenFile.FileName = "openFileDialog1";
-            // 
             // btnTrain
             // 
             this.btnTrain.Location = new System.Drawing.Point(744, 3);
@@ -136,6 +132,10 @@
             this.btnTrain.UseVisualStyleBackColor = true;
             this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
             // 
+            // ofdOpenFile
+            // 
+            this.ofdOpenFile.FileName = "openFileDialog1";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -143,7 +143,7 @@
             this.ClientSize = new System.Drawing.Size(822, 551);
             this.Controls.Add(this.tableLayoutPanel);
             this.Name = "frmMain";
-            this.Text = "Form1";
+            this.Text = "License Plate Recognition";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
