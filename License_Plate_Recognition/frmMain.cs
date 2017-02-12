@@ -293,7 +293,7 @@ namespace License_Plate_Recognition
         }
 
         private void btnTrain_Click(object sender, EventArgs e)
-        {
+        { 
             frmTrain train = new frmTrain();
             train.Show();
         }
