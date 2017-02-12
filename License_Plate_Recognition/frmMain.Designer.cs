@@ -36,6 +36,10 @@
             this.cbShowSteps = new System.Windows.Forms.CheckBox();
             this.txtInfo = new System.Windows.Forms.TextBox();
             this.btnTrain = new System.Windows.Forms.Button();
+            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
+            this.btnStartTransmission = new System.Windows.Forms.Button();
+            this.tbIpCamAddr = new System.Windows.Forms.TextBox();
+            this.btnSendAction = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ibOriginal)).BeginInit();
             this.SuspendLayout();
@@ -134,6 +138,38 @@
             this.btnTrain.Text = "Train";
             this.btnTrain.UseVisualStyleBackColor = true;
             this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
+            // 
+            // ofdOpenFile
+            // 
+            this.ofdOpenFile.FileName = "openFileDialog1";
+            // 
+            // btnStartTransmission
+            // 
+            this.btnStartTransmission.Location = new System.Drawing.Point(3, 546);
+            this.btnStartTransmission.Name = "btnStartTransmission";
+            this.btnStartTransmission.Size = new System.Drawing.Size(75, 23);
+            this.btnStartTransmission.TabIndex = 6;
+            this.btnStartTransmission.Text = "Start";
+            this.btnStartTransmission.UseVisualStyleBackColor = true;
+            this.btnStartTransmission.Click += new System.EventHandler(this.btnStartTransmission_Click);
+            // 
+            // tbIpCamAddr
+            // 
+            this.tbIpCamAddr.Location = new System.Drawing.Point(84, 546);
+            this.tbIpCamAddr.Name = "tbIpCamAddr";
+            this.tbIpCamAddr.Size = new System.Drawing.Size(213, 20);
+            this.tbIpCamAddr.TabIndex = 7;
+            this.tbIpCamAddr.Text = "http://192.168.1.101:8080/video";
+            // 
+            // btnSendAction
+            // 
+            this.btnSendAction.Location = new System.Drawing.Point(744, 546);
+            this.btnSendAction.Name = "btnSendAction";
+            this.btnSendAction.Size = new System.Drawing.Size(75, 23);
+            this.btnSendAction.TabIndex = 8;
+            this.btnSendAction.Text = "Send Action";
+            this.btnSendAction.UseVisualStyleBackColor = true;
+            this.btnSendAction.Click += new System.EventHandler(this.btnSendAction_Click);
             // 
             // frmMain
             // 
