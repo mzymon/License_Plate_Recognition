@@ -16,6 +16,8 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 //
 using Emgu.CV.Util;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace License_Plate_Recognition
 {
@@ -36,6 +38,8 @@ namespace License_Plate_Recognition
         public bool cbShowStepsChecked;
         public DetectChars detectChars;
         public DetectPlates detectPlates;
+        public List<string> MyPlates;
+        public List<LicensePlates> PlatesRead { get; set; }=new List<LicensePlates>();
         public frmMain()
         {
             InitializeComponent();
@@ -62,7 +66,10 @@ namespace License_Plate_Recognition
                 return;
                 //and bail
             }
-
+            MyPlates = new List<string>();
+            MyPlates.Add("SWD03541");
+            MyPlates.Add("WE984KV");
+            MyPlates.Add("SWDO3541");
         }
 
         private void btnOpenFile_Click(object sender, EventArgs e)
@@ -289,6 +296,152 @@ namespace License_Plate_Recognition
         {
             frmTrain train = new frmTrain();
             train.Show();
+        }
+        Capture capWebcam;
+        private void btnStartTransmission_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                capWebcam = new Capture(tbIpCamAddr.Text);
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("unable to read from webcam, error: " + Environment.NewLine + Environment.NewLine +
+                                ex.Message + Environment.NewLine + Environment.NewLine +
+                                "exiting program");
+                Environment.Exit(0);
+                return;
+            }
+            Application.Idle += RunLive;     // add process image function to the application's list of tasks
+        }
+
+        private void RunLive(object sender, EventArgs e)
+        {
+
+            Mat imgOriginalScene = new Mat();
+            imgOriginalScene = capWebcam.QueryFrame();
+            if (imgOriginalScene == null)
+            {
+                MessageBox.Show("unable to read frame from webcam" + Environment.NewLine + Environment.NewLine +
+                                "exiting program");
+                Application.Idle -= RunLive;
+                //Apli.Exit(0);
+                return;
+            }
+
+            ibOriginal.Image = imgOriginalScene;
+            //show original image on main form
+
+            List<PossiblePlate> listOfPossiblePlates = detectPlates.detectPlatesInScene(imgOriginalScene);
+            //detect plates
+
+            listOfPossiblePlates = detectChars.detectCharsInPlates(listOfPossiblePlates);
+            //detect chars in plates
+
+            //check if list of plates is null or zero
+            if ((listOfPossiblePlates == null))
+            {
+                //txtInfo.AppendText("\r\n" + "no license plates were detected" + "\r\n");
+            }
+            else if ((listOfPossiblePlates.Count == 0))
+            {
+               // txtInfo.AppendText("\r\n" + "no license plates were detected" + "\r\n");
+            }
+            else
+            {
+                //if we get in here list of possible plates has at leat one plate
+
+                //sort the list of possible plates in DESCENDING order (most number of chars to least number of chars)
+                listOfPossiblePlates.Sort((onePlate, otherPlate) => otherPlate.strChars.Length.CompareTo(onePlate.strChars.Length));
+
+                //suppose the plate with the most recognized chars
+                PossiblePlate licPlate = listOfPossiblePlates[0];
+                //(the first plate in sorted by string length descending order)
+                //is the actual plate
+
+                //CvInvoke.Imshow("final imgPlate", licPlate.imgPlate);
+                //show the final color plate image 
+                //CvInvoke.Imshow("final imgThresh", licPlate.imgThresh);
+                //show the final thresh plate image
+
+                //if no chars are present in the lic plate,
+                if ((licPlate.strChars.Length == 0))
+                {
+                   // txtInfo.AppendText("\r\n" + "no characters were detected" + licPlate.strChars + "\r\n");
+                    //update info text box
+                    return;
+                    //and return
+                }
+
+                drawRedRectangleAroundPlate(imgOriginalScene, licPlate);
+                //draw red rectangle around plate
+
+                txtInfo.AppendText("\r\n" + "license plate read from image = " + licPlate.strChars + "\r\n");
+                //write license plate text to text box
+                txtInfo.AppendText("\r\n" + "----------------------------------------" + "\r\n");
+
+                writeLicensePlateCharsOnImage(ref imgOriginalScene, licPlate);
+                //write license plate text on the image
+
+                ibOriginal.Image = imgOriginalScene;
+                //update image on main form
+                foreach (var plates in MyPlates)
+                {
+                    if (licPlate.strChars == plates)
+                    {
+                        if (PlatesRead.Exists(x => x.PlateNumber == licPlate.strChars && DateTime.Now - x.Time < new TimeSpan(0, 0, 45)))
+                            PlatesRead.Add(new LicensePlates(licPlate.strChars, DateTime.Now));
+                        else if (PlatesRead.Count == 0)
+                            PlatesRead.Add(new LicensePlates(licPlate.strChars, DateTime.Now));
+                        else if (DateTime.Now - PlatesRead.Last().Time > new TimeSpan(0, 1, 0))
+                            PlatesRead.Clear();
+                        //else if
+
+                        if (PlatesRead.Count >= 3)
+                        {
+                            SendCommandToESP8266(licPlate.strChars + "\n");
+                            Application.Idle -= RunLive;
+                        }
+                    }
+                }
+
+            }
+        }
+        const int PORT_NO = 5000;
+        const string SERVER_IP = "192.168.1.198";
+        private void btnSendAction_Click(object sender, EventArgs e)
+        {
+          
+        
+                //---data to send to the server---
+                string textToSend = "cyce\n";
+
+            SendCommandToESP8266(textToSend);
+
+
+        }
+        private bool SendCommandToESP8266(string command)
+        {
+            
+
+            //---create a TCPClient object at the IP and port no.---
+            TcpClient client = new TcpClient(SERVER_IP, PORT_NO);
+            NetworkStream nwStream = client.GetStream();
+            byte[] bytesToSend = ASCIIEncoding.ASCII.GetBytes(command);
+
+            //---send the text---
+            //Console.WriteLine("Sending : " + textToSend);
+            nwStream.Write(bytesToSend, 0, bytesToSend.Length);
+
+            //---read back the text---
+            byte[] bytesToRead = new byte[client.ReceiveBufferSize];
+            int bytesRead = nwStream.Read(bytesToRead, 0, client.ReceiveBufferSize);
+            txtInfo.AppendText("\r\n" + "Received : " + Encoding.ASCII.GetString(bytesToRead, 0, bytesRead));
+            //Console.ReadLine();
+            client.Close();
+            return true;
         }
     }
 }

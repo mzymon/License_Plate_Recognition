@@ -35,8 +35,11 @@
             this.ibOriginal = new Emgu.CV.UI.ImageBox();
             this.cbShowSteps = new System.Windows.Forms.CheckBox();
             this.txtInfo = new System.Windows.Forms.TextBox();
-            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.btnTrain = new System.Windows.Forms.Button();
+            this.ofdOpenFile = new System.Windows.Forms.OpenFileDialog();
+            this.btnStartTransmission = new System.Windows.Forms.Button();
+            this.tbIpCamAddr = new System.Windows.Forms.TextBox();
+            this.btnSendAction = new System.Windows.Forms.Button();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ibOriginal)).BeginInit();
             this.SuspendLayout();
@@ -54,14 +57,18 @@
             this.tableLayoutPanel.Controls.Add(this.cbShowSteps, 2, 0);
             this.tableLayoutPanel.Controls.Add(this.txtInfo, 0, 2);
             this.tableLayoutPanel.Controls.Add(this.btnTrain, 3, 0);
+            this.tableLayoutPanel.Controls.Add(this.btnStartTransmission, 0, 3);
+            this.tableLayoutPanel.Controls.Add(this.tbIpCamAddr, 1, 3);
+            this.tableLayoutPanel.Controls.Add(this.btnSendAction, 3, 3);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
-            this.tableLayoutPanel.RowCount = 3;
+            this.tableLayoutPanel.RowCount = 4;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(822, 551);
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.Size = new System.Drawing.Size(822, 573);
             this.tableLayoutPanel.TabIndex = 0;
             // 
             // btnOpenFile
@@ -94,7 +101,7 @@
             this.ibOriginal.Enabled = false;
             this.ibOriginal.Location = new System.Drawing.Point(3, 33);
             this.ibOriginal.Name = "ibOriginal";
-            this.ibOriginal.Size = new System.Drawing.Size(816, 358);
+            this.ibOriginal.Size = new System.Drawing.Size(816, 353);
             this.ibOriginal.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ibOriginal.TabIndex = 2;
             this.ibOriginal.TabStop = false;
@@ -114,17 +121,13 @@
             // 
             this.tableLayoutPanel.SetColumnSpan(this.txtInfo, 4);
             this.txtInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtInfo.Location = new System.Drawing.Point(3, 397);
+            this.txtInfo.Location = new System.Drawing.Point(3, 392);
             this.txtInfo.Multiline = true;
             this.txtInfo.Name = "txtInfo";
             this.txtInfo.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtInfo.Size = new System.Drawing.Size(816, 151);
+            this.txtInfo.Size = new System.Drawing.Size(816, 148);
             this.txtInfo.TabIndex = 4;
             this.txtInfo.WordWrap = false;
-            // 
-            // ofdOpenFile
-            // 
-            this.ofdOpenFile.FileName = "openFileDialog1";
             // 
             // btnTrain
             // 
@@ -136,14 +139,46 @@
             this.btnTrain.UseVisualStyleBackColor = true;
             this.btnTrain.Click += new System.EventHandler(this.btnTrain_Click);
             // 
+            // ofdOpenFile
+            // 
+            this.ofdOpenFile.FileName = "openFileDialog1";
+            // 
+            // btnStartTransmission
+            // 
+            this.btnStartTransmission.Location = new System.Drawing.Point(3, 546);
+            this.btnStartTransmission.Name = "btnStartTransmission";
+            this.btnStartTransmission.Size = new System.Drawing.Size(75, 23);
+            this.btnStartTransmission.TabIndex = 6;
+            this.btnStartTransmission.Text = "Start";
+            this.btnStartTransmission.UseVisualStyleBackColor = true;
+            this.btnStartTransmission.Click += new System.EventHandler(this.btnStartTransmission_Click);
+            // 
+            // tbIpCamAddr
+            // 
+            this.tbIpCamAddr.Location = new System.Drawing.Point(84, 546);
+            this.tbIpCamAddr.Name = "tbIpCamAddr";
+            this.tbIpCamAddr.Size = new System.Drawing.Size(213, 20);
+            this.tbIpCamAddr.TabIndex = 7;
+            this.tbIpCamAddr.Text = "http://192.168.1.101:8080/video";
+            // 
+            // btnSendAction
+            // 
+            this.btnSendAction.Location = new System.Drawing.Point(744, 546);
+            this.btnSendAction.Name = "btnSendAction";
+            this.btnSendAction.Size = new System.Drawing.Size(75, 23);
+            this.btnSendAction.TabIndex = 8;
+            this.btnSendAction.Text = "Send Action";
+            this.btnSendAction.UseVisualStyleBackColor = true;
+            this.btnSendAction.Click += new System.EventHandler(this.btnSendAction_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(822, 551);
+            this.ClientSize = new System.Drawing.Size(822, 573);
             this.Controls.Add(this.tableLayoutPanel);
             this.Name = "frmMain";
-            this.Text = "Form1";
+            this.Text = "License Plate Recognition";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.tableLayoutPanel.ResumeLayout(false);
             this.tableLayoutPanel.PerformLayout();
@@ -162,6 +197,9 @@
         public System.Windows.Forms.CheckBox cbShowSteps;
         public System.Windows.Forms.TextBox txtInfo;
         private System.Windows.Forms.Button btnTrain;
+        private System.Windows.Forms.Button btnStartTransmission;
+        private System.Windows.Forms.TextBox tbIpCamAddr;
+        private System.Windows.Forms.Button btnSendAction;
     }
 }
 
