@@ -402,7 +402,7 @@ namespace License_Plate_Recognition
                         if (PlatesRead.Count >= 3)
                         {
                             SendCommandToESP8266(licPlate.strChars + "\n");
-                            Application.Idle -= RunLive;
+                            Application.Idle -= RunLive; 
                         }
                     }
                 }
